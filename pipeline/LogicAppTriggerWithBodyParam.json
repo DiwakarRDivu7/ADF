@@ -1,0 +1,36 @@
+{
+	"name": "LogicAppTriggerWithBodyParam",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-30.southindia.logic.azure.com:443/workflows/edaf415fd0f447708d6c3b08901320ee/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bnI9NrgOgy5SELlJ0pR7gSpptOatGWdz2fQV8BbW3Qk",
+					"method": "POST",
+					"body": {
+						"value": "{\"FileName\":\"@{pipeline().parameters.name}\",\"Location\":\"JSON\",\"Model\":\"indian_model\",\"Server_name\":\"local_service\",\"Onwer_email\":\"divu7diwa@yahoo.com\"}",
+						"type": "Expression"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"name": {
+				"type": "string",
+				"defaultValue": "usData"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

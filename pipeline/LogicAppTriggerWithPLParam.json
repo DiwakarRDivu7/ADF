@@ -1,0 +1,35 @@
+{
+	"name": "LogicAppTriggerWithPLParam",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": {
+						"value": "@concat('https://prod-04.southindia.logic.azure.com/workflows/0191c2368f3c44619f3b6f4f043d0fd3/triggers/manual/paths/invoke/',pipeline().parameters.webParam,'?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=S69pwwUJxjpm9BTWPf9fWMzfm9teDTaZG14aGZuRXLs')",
+						"type": "Expression"
+					},
+					"method": "GET"
+				}
+			}
+		],
+		"parameters": {
+			"webParam": {
+				"type": "string",
+				"defaultValue": "diwak"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

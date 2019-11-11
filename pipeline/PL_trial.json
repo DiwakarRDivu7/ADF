@@ -1,0 +1,40 @@
+{
+	"name": "PL_trial",
+	"properties": {
+		"activities": [
+			{
+				"name": "WebHook1",
+				"type": "WebHook",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-30.southindia.logic.azure.com:443/workflows/edaf415fd0f447708d6c3b08901320ee/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bnI9NrgOgy5SELlJ0pR7gSpptOatGWdz2fQV8BbW3Qk",
+					"method": "POST",
+					"body": {
+						"value": "{\"FileName\":\"usData1\",\"Location\":\"JSON\",\"Model\":\"indian_model\",\"Server_name\":\"local_service\",\"Onwer_email\":\"divu7diwa@yahoo.com\"}",
+						"type": "Expression"
+					},
+					"timeout": "00:00:00"
+				}
+			},
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "WebHook1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 1
+				}
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
