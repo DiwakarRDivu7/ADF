@@ -1,0 +1,38 @@
+{
+	"name": "DS_ABLB_CSV_TableLookUp",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Arr.csv",
+				"folderPath": "lookup",
+				"container": "blobcontainer"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "table",
+				"type": "String"
+			},
+			{
+				"name": "srccol",
+				"type": "String"
+			},
+			{
+				"name": "sinkcol",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

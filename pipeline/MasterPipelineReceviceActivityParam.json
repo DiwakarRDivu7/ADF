@@ -1,0 +1,75 @@
+{
+	"name": "MasterPipelineReceviceActivityParam",
+	"properties": {
+		"activities": [
+			{
+				"name": "MyExecutePipelineActivity",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "GetMetadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "invokedPipeline",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"sourceBlobContainer": {
+							"value": "@pipeline().parameters.masterSourceBlobContainer",
+							"type": "Expression"
+						},
+						"sinkBlobContainer": {
+							"value": "@activity('GetMetadata').output.lastModified",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "GetMetadata",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "InputBinaryDataset",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"lastModified"
+					],
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true
+					}
+				}
+			}
+		],
+		"parameters": {
+			"masterSourceBlobContainer": {
+				"type": "String",
+				"defaultValue": "input"
+			},
+			"masterSinkBlobContainer": {
+				"type": "String",
+				"defaultValue": "masterSinkPath"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

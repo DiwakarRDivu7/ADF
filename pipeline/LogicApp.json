@@ -1,0 +1,29 @@
+{
+	"name": "LogicApp",
+	"properties": {
+		"activities": [
+			{
+				"name": "callLogicAppWeb",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-28.southindia.logic.azure.com:443/workflows/6076f39ee99a43a68f5e5b963ae0f790/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=SpKO0PsnblSRxX8MPjMC0g9cGN0V41LxhxOCL9aCOFk",
+					"method": "POST",
+					"body": {
+						"message": "start_logicApp"
+					}
+				}
+			}
+		],
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

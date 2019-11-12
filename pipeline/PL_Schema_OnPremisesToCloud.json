@@ -1,0 +1,108 @@
+{
+	"name": "PL_Schema_OnPremisesToCloud",
+	"properties": {
+		"activities": [
+			{
+				"name": "1_CopyFromOnPremisesToBlob",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "OracleSource",
+						"oracleReaderQuery": {
+							"value": "@concat('SELECT * FROM ',pipeline().parameters.userName,'.',pipeline().parameters.tableName)",
+							"type": "Expression"
+						},
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".csv"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "CUSTOMER_ID"
+								},
+								"sink": {
+									"name": "EMP_ID",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CUSTOMER_NAME"
+								},
+								"sink": {
+									"name": "EMP_NAME",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CITY"
+								},
+								"sink": {
+									"name": "CITY",
+									"type": "String"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_OnPremisesOracle",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_ABLB_Out_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"table": {
+								"value": "@pipeline().parameters.tableName",
+								"type": "Expression"
+							},
+							"user": {
+								"value": "@pipeline().parameters.userName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"userName": {
+				"type": "string",
+				"defaultValue": "HOMEUSER"
+			},
+			"tableName": {
+				"type": "string",
+				"defaultValue": "CUSTOMERS"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

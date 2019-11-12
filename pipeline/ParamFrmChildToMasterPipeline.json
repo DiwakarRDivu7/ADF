@@ -1,0 +1,42 @@
+{
+	"name": "ParamFrmChildToMasterPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "MyExecutePipelineActivity",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "invokedPipeline",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"sourceBlobContainer": {
+							"value": "@pipeline().parameters.masterSourceBlobContainer",
+							"type": "Expression"
+						},
+						"sinkBlobContainer": {
+							"value": "@pipeline().parameters.masterSinkBlobContainer",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"parameters": {
+			"masterSourceBlobContainer": {
+				"type": "String",
+				"defaultValue": "input"
+			},
+			"masterSinkBlobContainer": {
+				"type": "String",
+				"defaultValue": "masterSinkPath"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

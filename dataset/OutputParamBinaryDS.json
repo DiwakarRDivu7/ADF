@@ -1,0 +1,27 @@
+{
+	"name": "OutputParamBinaryDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"parma": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().parma",
+					"type": "Expression"
+				},
+				"container": "blobcontainer"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,155 @@
+{
+	"name": "PL_Generic_Schema_Mapping",
+	"properties": {
+		"activities": [
+			{
+				"name": "2_Iterate_ToCopy_N_Tables",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "1_Lookup",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('1_Lookup').output.value",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "1_copy_OnPrem_blob",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "OracleSource",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".csv"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "@item().srccol[0]"
+											},
+											"sink": {
+												"name": "@item().sinkcol[0]",
+												"type": "String"
+											}
+										},
+										{
+											"source": {
+												"name": "@item().srccol[1]"
+											},
+											"sink": {
+												"name": "@item().sinkcol[1]",
+												"type": "String"
+											}
+										}
+									]
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Generic_OnPremises_Oracle",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ABLB_Out_CSV",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": {
+											"value": "@item().table",
+											"type": "Expression"
+										},
+										"user": {
+											"value": "@pipeline().parameters.userName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "1_Lookup",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						}
+					},
+					"dataset": {
+						"referenceName": "DS_ABLB_JSON_TableLookup",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"parameters": {
+			"userName": {
+				"type": "string",
+				"defaultValue": "HOMEUSER"
+			},
+			"tableName": {
+				"type": "array",
+				"defaultValue": [
+					"CUSTOMERS",
+					"SUPPLIERS"
+				]
+			},
+			"col": {
+				"type": "array",
+				"defaultValue": [
+					"ID",
+					"NAME",
+					"CITY"
+				]
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,23 @@
+{
+	"name": "SourceParamDataset",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "wordCount.txt",
+				"folderPath": {
+					"value": "@pipeline().parameters.sourceBlobContainer",
+					"type": "Expression"
+				},
+				"container": "powershellcontainer"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

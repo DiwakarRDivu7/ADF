@@ -1,0 +1,6 @@
+{
+	"name": "integrationRuntimeWithOracle",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

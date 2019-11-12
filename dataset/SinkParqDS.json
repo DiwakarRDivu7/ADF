@@ -1,0 +1,30 @@
+{
+	"name": "SinkParqDS",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"parqPath": {
+				"type": "string",
+				"defaultValue": "parq"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"folderPath": {
+					"value": "@dataset().parqPath",
+					"type": "Expression"
+				},
+				"container": "blobcontainer"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

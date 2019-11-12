@@ -1,0 +1,155 @@
+{
+	"name": "PL_Generic_copy_to_any_storage",
+	"properties": {
+		"activities": [
+			{
+				"name": "1-Switch-Storage",
+				"type": "Switch",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"on": {
+						"value": "@pipeline().parameters.storage",
+						"type": "Expression"
+					},
+					"cases": [
+						{
+							"value": "blob",
+							"activities": [
+								{
+									"name": "1-2_copy_to_blob1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "BinarySource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true
+											}
+										},
+										"sink": {
+											"type": "BinarySink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "InputBinaryDataset",
+											"type": "DatasetReference"
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "OutputBinaryDataset",
+											"type": "DatasetReference"
+										}
+									]
+								}
+							]
+						},
+						{
+							"value": "lake",
+							"activities": [
+								{
+									"name": "1-3_copy_to_lake",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "BinarySource",
+											"storeSettings": {
+												"type": "AzureBlobStorageReadSettings",
+												"recursive": true
+											}
+										},
+										"sink": {
+											"type": "BinarySink",
+											"storeSettings": {
+												"type": "AzureBlobStorageWriteSettings"
+											}
+										},
+										"enableStaging": false
+									},
+									"inputs": [
+										{
+											"referenceName": "InputBinaryDataset",
+											"type": "DatasetReference"
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "OutputParamBinaryDS",
+											"type": "DatasetReference",
+											"parameters": {
+												"parma": {
+													"value": "@pipeline().parameters.table",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					],
+					"defaultActivities": [
+						{
+							"name": "1-1_wait",
+							"type": "Wait",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"waitTimeInSeconds": 1
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"storage": {
+				"type": "string",
+				"defaultValue": "blob"
+			},
+			"container": {
+				"type": "string",
+				"defaultValue": "blobstoragetrial"
+			},
+			"table": {
+				"type": "string",
+				"defaultValue": "copyTable"
+			},
+			"notebookPath": {
+				"type": "string",
+				"defaultValue": "/Users/divu7diwa@yahoo.com/TransfromData"
+			}
+		},
+		"variables": {
+			"DBVar": {
+				"type": "String"
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

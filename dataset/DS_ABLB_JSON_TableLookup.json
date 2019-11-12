@@ -1,0 +1,34 @@
+{
+	"name": "DS_ABLB_JSON_TableLookup",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobLinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Arr.json",
+				"folderPath": "lookup",
+				"container": "blobcontainer"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"table": {
+					"type": "string"
+				},
+				"srccol": {
+					"type": "null"
+				},
+				"sinkcol": {
+					"type": "null"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

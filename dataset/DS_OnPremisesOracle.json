@@ -1,0 +1,23 @@
+{
+	"name": "DS_OnPremisesOracle",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Orac",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "OracleTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@pipeline().parameters.userName",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@pipeline().parameters.tableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

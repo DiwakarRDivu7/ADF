@@ -1,0 +1,90 @@
+{
+	"name": "PL_Generic_OnPremises_Blob",
+	"properties": {
+		"activities": [
+			{
+				"name": "1_Iterate_ToCopy_N_Tables",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.tableName",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"activities": [
+						{
+							"name": "1_copy_OnPrem_blob",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "OracleSource",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobStorageWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".csv"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Generic_OnPremises_Oracle",
+									"type": "DatasetReference"
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ABLB_Out_CSV",
+									"type": "DatasetReference",
+									"parameters": {
+										"table": {
+											"value": "@item()",
+											"type": "Expression"
+										},
+										"user": {
+											"value": "@pipeline().parameters.userName",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"userName": {
+				"type": "string",
+				"defaultValue": "HOMEUSER"
+			},
+			"tableName": {
+				"type": "array",
+				"defaultValue": [
+					"CUSTOMERS",
+					"SUPPLIERS"
+				]
+			}
+		},
+		"annotations": []
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
